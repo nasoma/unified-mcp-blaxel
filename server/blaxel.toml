@@ -1,0 +1,8 @@
+type = "function"
+
+[runtime]
+transport = "http-stream"
+
+[entrypoint]
+prod = ".venv/bin/python3 src/server.py"
+dev = "npx nodemon --exec uv run python src/server.py"
