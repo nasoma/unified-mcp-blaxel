@@ -43,7 +43,7 @@ Create a `.env` file in the server directory with the following environment vari
 
 ```env
 # Upwork Configuration
-EXCHANGE_RATE=120.0        # KES to USD exchange rate (e.g., 1 USD = 120 KES)
+EXCHANGE_RATE=124.0        # KES to USD exchange rate (e.g., 1 USD = 124 KES)
 UPWORK_FEE=0.99           # Upwork fee amount (default: 0.99)
 UPWORK_RATE=0.884         # Upwork rate after fees (default: 0.884)
 currency_code=KES         # Default currency (default: KES)
