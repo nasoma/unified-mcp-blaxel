@@ -1,4 +1,5 @@
 type = "function"
+name = "unifiedMCP-on-Blaxel
 
 [runtime]
 transport = "http-stream"
