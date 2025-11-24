@@ -11,4 +11,5 @@ dependencies = [
   "mcp[cli]>=1.22.0",
   "python-dotenv>=1.2.1",
   "pytz>=2025.2",
+  "shinzo>=1.0.2",
 ]

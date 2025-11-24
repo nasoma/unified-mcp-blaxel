@@ -1,6 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 from config import settings
 from services import payment, email, airtime
+from shinzo import instrument_server
 
 # Initialize MCP server with HTTP transport
 mcp = FastMCP(
@@ -10,9 +11,23 @@ mcp = FastMCP(
     port=settings.PORT,
 )
 
+
+observability = instrument_server(
+    mcp, 
+    config={
+        "server_name": "UnifiedMCP",
+        "server_version": "1.0.0",
+        "exporter_endpoint": "https://api.app.shinzo.ai/telemetry/ingest_http",
+        "exporter_auth":{
+            "type":"bearer",
+            "token": "2a2fb33e4e74356a3158139adf91868d"
+        }
+    }
+)
+
 # --- Payment Tools ---
 
-@mcp.tool()
+@mcp.tool(description="Convert Upwork payment amounts from USD to Kenyan Shillings.")
 def convert_to_kes(input_str: str) -> str:
     """
     Convert Upwork payment amounts from USD to Kenyan Shillings.
@@ -43,13 +58,13 @@ def send_email(recipient: str, subject: str, body_html: str) -> str:
 
 # --- Airtime Tools ---
 
-@mcp.tool(description="Check the airtime balance for your account.")
+@mcp.tool()
 def check_balance() -> str:
     """Check Africa's Talking account balance."""
     # Defined as synchronous so FastMCP runs it in a thread pool
     return airtime.check_balance()
 
-@mcp.tool(description="Load airtime to a specified telephone number.")
+@mcp.tool()
 def load_airtime(phone_number: str, amount: float, currency_code: str) -> str:
     """Load airtime to a phone number."""
     # Defined as synchronous so FastMCP runs it in a thread pool

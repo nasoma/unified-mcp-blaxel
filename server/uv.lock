@@ -1286,6 +1286,24 @@ wheels = [
 ]
 
 [[package]]
+name = "shinzo"
+version = "1.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "mcp" },
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-otlp-proto-http" },
+    { name = "opentelemetry-sdk" },
+    { name = "opentelemetry-semantic-conventions" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8d/9a/7695250e669ff66671443777e9f33ab839b0048455e21f56388f99e1442b/shinzo-1.0.2.tar.gz", hash = "sha256:c57cab99f5c1421e95b0b97fd917a182351e8347319fdd2dc2cd756dbec28208", size = 17705, upload-time = "2025-11-20T05:13:27.871Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/30/2b5093f3e3b0b3c2534c828bf3805422ee454a6788dbeb66724ad486bcaa/shinzo-1.0.2-py3-none-any.whl", hash = "sha256:00d38117e5a15b1882faa3308b48419463243090378943e535a7e09b73200848", size = 18115, upload-time = "2025-11-20T05:13:25.948Z" },
+]
+
+[[package]]
 name = "six"
 version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1463,6 +1481,7 @@ dependencies = [
     { name = "mcp", extra = ["cli"] },
     { name = "python-dotenv" },
     { name = "pytz" },
+    { name = "shinzo" },
 ]
 
 [package.metadata]
@@ -1473,6 +1492,7 @@ requires-dist = [
     { name = "mcp", extras = ["cli"], specifier = ">=1.22.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "pytz", specifier = ">=2025.2" },
+    { name = "shinzo", specifier = ">=1.0.2" },
 ]
 
 [[package]]
