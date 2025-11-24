@@ -2,7 +2,7 @@ from mcp.server.fastmcp import FastMCP
 from config import settings
 from services import payment, email, airtime
 from shinzo import instrument_server
-import os
+
 # Initialize MCP server with HTTP transport
 mcp = FastMCP(
     "UnifiedMCP",
@@ -27,7 +27,7 @@ observability = instrument_server(
 
 # --- Payment Tools ---
 
-@mcp.tool(description="Convert Upwork payment amounts from USD to Kenyan Shillings.")
+@mcp.tool()
 def convert_to_kes(input_str: str) -> str:
     """
     Convert Upwork payment amounts from USD to Kenyan Shillings.
