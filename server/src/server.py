@@ -2,7 +2,7 @@ from mcp.server.fastmcp import FastMCP
 from config import settings
 from services import payment, email, airtime
 from shinzo import instrument_server
-
+import os
 # Initialize MCP server with HTTP transport
 mcp = FastMCP(
     "UnifiedMCP",
@@ -17,10 +17,10 @@ observability = instrument_server(
     config={
         "server_name": "UnifiedMCP",
         "server_version": "1.0.0",
-        "exporter_endpoint": "https://api.app.shinzo.ai/telemetry/ingest_http",
+        "exporter_endpoint": settings.EXPORTER_ENDPOINT,
         "exporter_auth":{
             "type":"bearer",
-            "token": "2a2fb33e4e74356a3158139adf91868d"
+            "token": settings.EXPORTER_TOKEN
         }
     }
 )

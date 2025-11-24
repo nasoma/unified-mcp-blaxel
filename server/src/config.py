@@ -28,6 +28,10 @@ class Settings:
     HOST: str = os.getenv("BL_SERVER_HOST", "0.0.0.0")
     PORT: str = os.getenv("BL_SERVER_PORT", "80")
 
+    # Exporter Settings
+    EXPORTER_ENDPOINT: Optional[str] = os.getenv("EXPORTER_ENDPOINT")
+    EXPORTER_TOKEN: Optional[str] = os.getenv("EXPORTER_TOKEN")
+
     @classmethod
     def validate(cls):
         """Validate critical configuration."""
