@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
   "africastalking>=2.0.1",
+  "agnost>=0.1.8",
   "blaxel[core,telemetry]==0.2.25",
   "boto3>=1.41.2",
   "mcp[cli]>=1.22.0",

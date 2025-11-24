@@ -32,6 +32,10 @@ class Settings:
     SHINZO_ENDPOINT: Optional[str] = os.getenv("SHINZO_ENDPOINT")
     SHINZO_TOKEN: Optional[str] = os.getenv("SHINZO_TOKEN")
 
+    # Agnost Settings
+    AGNOST_ID: Optional[str] = os.getenv("AGNOST_ID")
+
+
     @classmethod
     def validate(cls):
         """Validate critical configuration."""

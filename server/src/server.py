@@ -2,6 +2,7 @@ from mcp.server.fastmcp import FastMCP
 from config import settings
 from services import payment, email, airtime
 from shinzo import instrument_server
+from agnost import track, config
 
 # Initialize MCP server with HTTP transport
 mcp = FastMCP(
@@ -11,6 +12,11 @@ mcp = FastMCP(
     port=settings.PORT,
 )
 
+track(mcp, settings.AGNOST_ID, config(
+    endpoint="https://api.agnost.ai",
+    disable_input=False,
+    disable_output=False
+))
 
 observability = instrument_server(
     mcp, 
