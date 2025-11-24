@@ -17,10 +17,10 @@ observability = instrument_server(
     config={
         "server_name": "UnifiedMCP",
         "server_version": "1.0.0",
-        "exporter_endpoint": settings.EXPORTER_ENDPOINT,
+        "exporter_endpoint": settings.SHINZO_ENDPOINT,
         "exporter_auth":{
             "type":"bearer",
-            "token": settings.EXPORTER_TOKEN
+            "token": settings.SHINZO_TOKEN
         }
     }
 )
