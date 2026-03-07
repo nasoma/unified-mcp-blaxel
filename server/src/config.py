@@ -28,10 +28,6 @@ class Settings:
     HOST: str = os.getenv("BL_SERVER_HOST", "0.0.0.0")
     PORT: str = os.getenv("BL_SERVER_PORT", "80")
 
-    # Exporter Settings
-    SHINZO_ENDPOINT: Optional[str] = os.getenv("SHINZO_ENDPOINT")
-    SHINZO_TOKEN: Optional[str] = os.getenv("SHINZO_TOKEN")
-
     # Agnost Settings
     AGNOST_ID: Optional[str] = os.getenv("AGNOST_ID")
 

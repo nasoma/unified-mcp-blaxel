@@ -1,7 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 from config import settings
 from services import payment, email, airtime
-from shinzo import instrument_server
 from agnost_mcp import track, config
 
 # Initialize MCP server with HTTP transport
@@ -12,29 +11,11 @@ mcp = FastMCP(
     port=settings.PORT,
 )
 
-# track(mcp, settings.AGNOST_ID, config(
-#     endpoint="https://api.agnost.ai",
-# 
-# ))
-
 track(mcp, settings.AGNOST_ID, config(
     endpoint="https://api.agnost.ai",
     disable_input=False,
     disable_output=False
 ))
-
-observability = instrument_server(
-    mcp, 
-    config={
-        "server_name": "UnifiedMCP",
-        "server_version": "1.0.0",
-        "exporter_endpoint": settings.SHINZO_ENDPOINT,
-        "exporter_auth":{
-            "type":"bearer",
-            "token": settings.SHINZO_TOKEN
-        }
-    }
-)
 
 # --- Upwork Payment Tools ---
 
