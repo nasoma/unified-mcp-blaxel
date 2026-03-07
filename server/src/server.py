@@ -2,6 +2,7 @@ from mcp.server.fastmcp import FastMCP
 from config import settings
 from services import payment, email, airtime
 from agnost_mcp import track, config
+from shinzo import instrument_server
 
 # Initialize MCP server with HTTP transport
 mcp = FastMCP(
@@ -16,6 +17,18 @@ track(mcp, settings.AGNOST_ID, config(
     disable_input=False,
     disable_output=False
 ))
+
+telemetry = instrument_server(
+    mcp, 
+    config={
+        "server_name": "UnifiedMCP",
+        "server_version": "1.0.0",
+        "exporter_auth":{
+            "type":"bearer",
+            "token": settings.SHINZO_TOKEN
+        }
+    }
+)
 
 # --- Upwork Payment Tools ---
 

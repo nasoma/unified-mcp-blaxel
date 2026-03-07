@@ -31,6 +31,9 @@ class Settings:
     # Agnost Settings
     AGNOST_ID: Optional[str] = os.getenv("AGNOST_ID")
 
+    # Shinzo Settings
+    SHINZO_TOKEN: Optional[str] = os.getenv("SHINZO_TOKEN")
+
 
     @classmethod
     def validate(cls):
