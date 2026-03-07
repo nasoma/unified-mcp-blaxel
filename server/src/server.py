@@ -31,7 +31,7 @@ observability = instrument_server(
     }
 )
 
-# --- Payment Tools ---
+# --- Upwork Payment Tools ---
 
 @mcp.tool()
 def convert_to_kes(input_str: str) -> str:
