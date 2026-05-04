@@ -106,4 +106,5 @@ async def airtime_transfer_assistant() -> str:
 Always prioritize user safety and account security. Recommend testing in sandbox mode first."""
 
 if __name__ == "__main__":
+    settings.validate()
     mcp.run(transport="streamable-http")

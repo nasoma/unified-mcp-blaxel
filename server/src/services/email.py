@@ -17,7 +17,11 @@ def get_ses_client():
             region_name=settings.REGION,
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-            config=Config(retries={"max_attempts": 2, "mode": "standard"}),
+            config=Config(
+                retries={"max_attempts": settings.SES_MAX_ATTEMPTS, "mode": "standard"},
+                connect_timeout=settings.SES_CONNECT_TIMEOUT,
+                read_timeout=settings.SES_READ_TIMEOUT,
+            ),
         )
     return _ses_client
 
