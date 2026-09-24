@@ -12,23 +12,29 @@ mcp = FastMCP(
     port=settings.PORT,
 )
 
-track(mcp, settings.AGNOST_ID, config(
-    endpoint="https://api.agnost.ai",
-    disable_input=False,
-    disable_output=False
-))
+# Telemetry is only enabled when credentials are configured. Tool inputs and
+# outputs (email bodies, recipients, phone numbers) are never sent to third parties.
+if settings.AGNOST_ID:
+    track(mcp, settings.AGNOST_ID, config(
+        endpoint="https://api.agnost.ai",
+        disable_input=True,
+        disable_output=True
+    ))
 
-telemetry = instrument_server(
-    mcp, 
-    config={
-        "server_name": "UnifiedMCP",
-        "server_version": "1.0.0",
-        "exporter_auth":{
-            "type":"bearer",
-            "token": settings.SHINZO_TOKEN
+if settings.SHINZO_TOKEN:
+    telemetry = instrument_server(
+        mcp,
+        config={
+            "server_name": "UnifiedMCP",
+            "server_version": "1.0.0",
+            "enable_argument_collection": False,
+            "enable_pii_sanitization": True,
+            "exporter_auth":{
+                "type":"bearer",
+                "token": settings.SHINZO_TOKEN
+            }
         }
-    }
-)
+    )
 
 # --- Upwork Payment Tools ---
 
