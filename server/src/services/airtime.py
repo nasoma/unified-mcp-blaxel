@@ -1,5 +1,6 @@
 import africastalking
 import json
+import re
 from africastalking.Service import AfricasTalkingException
 from config import settings
 
@@ -11,25 +12,48 @@ else:
     airtime = None
 
 COUNTRY_CODES = {"kenya": "+254"}
+# Kenyan mobile numbers: 7xxxxxxxx or 1xxxxxxxx, optionally prefixed by 0, 254 or +254
+KENYA_MOBILE_PATTERN = re.compile(r"^(?:\+?254|0)?([17]\d{8})$")
+SUCCESS_STATUSES = {"sent", "success"}
 SUPPORTED_COUNTRIES = {
     "+254": {"name": "Kenya", "currency": "KES", "min_amount": 5, "max_amount": 10000}
 }
 
 def format_phone_number(phone_number: str) -> str:
-    """Format phone number with Kenya country code."""
-    phone_number = str(phone_number).strip()
-
+    """Validate a Kenyan mobile number and return it in +254XXXXXXXXX format."""
     if settings.USER_COUNTRY != "kenya":
         raise ValueError("Only Kenya is supported. Set country to 'kenya'.")
 
-    country_code = COUNTRY_CODES["kenya"]
+    cleaned = re.sub(r"[\s\-()]", "", str(phone_number))
+    match = KENYA_MOBILE_PATTERN.match(cleaned)
+    if not match:
+        raise ValueError(
+            f"'{phone_number}' is not a valid Kenyan mobile number "
+            "(expected e.g. 0712345678 or +254712345678)."
+        )
+    return COUNTRY_CODES["kenya"] + match.group(1)
 
-    if phone_number.startswith("0"):
-        return country_code + phone_number[1:]
-    elif phone_number.startswith("+254"):
-        return phone_number
-    else:
-        return country_code + phone_number
+def _parse_send_response(response) -> str | None:
+    """Return an error message if the send response reports a failure, else None."""
+    if isinstance(response, str):
+        try:
+            response = json.loads(response)
+        except json.JSONDecodeError:
+            return f"Unexpected response from Africa's Talking: {response}"
+    if not isinstance(response, dict):
+        return f"Unexpected response from Africa's Talking: {response}"
+
+    results = response.get("responses") or []
+    if not results:
+        error = response.get("errorMessage")
+        return f"No airtime was queued: {error or 'empty response'}"
+
+    result = results[0]
+    status = str(result.get("status", ""))
+    if status.lower() not in SUCCESS_STATUSES:
+        error = result.get("errorMessage") or response.get("errorMessage") or "unknown error"
+        return f"Airtime transfer failed (status: {status or 'unknown'}): {error}"
+    return None
 
 def check_balance() -> str:
     """Check Africa's Talking account balance."""
@@ -42,7 +66,7 @@ def check_balance() -> str:
         if "UserData" in response and "balance" in response["UserData"]:
             return f"Account Balance: {response['UserData']['balance']}"
         return "Balance information not available. Unexpected response structure."
-    except africastalking.AfricasTalkingException as e:
+    except AfricasTalkingException as e:
         return f"Africa's Talking API error: {str(e)}"
     except Exception as e:
         return f"Unexpected error fetching balance: {str(e)}"
@@ -62,14 +86,17 @@ def load_airtime(phone_number: str, amount: float, currency_code: str) -> str:
         formatted_number = format_phone_number(phone_number)
 
         # This is a blocking call
-        airtime.send(
+        response = airtime.send(
             phone_number=formatted_number, amount=amount, currency_code=currency_code
         )
 
+        error = _parse_send_response(response)
+        if error:
+            return f"Error: {error}"
         return f"Successfully sent {currency_code} {amount} airtime to {formatted_number}"
     except ValueError as e:
         return f"Invalid input: {str(e)}"
-    except africastalking.AfricasTalkingException as e:
+    except AfricasTalkingException as e:
         return f"Africa's Talking API error: {str(e)}"
     except Exception as e:
         return f"Unexpected error sending airtime: {str(e)}"
